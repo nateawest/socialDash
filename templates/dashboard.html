@@ -1,0 +1,40 @@
+<!-- dashboard.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        /* CSS style to center the image */
+        .centered-image {
+            display: block;
+            margin: 0 auto;
+        }
+        /* CSS style to center the heading element */
+        .centered {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1 class="centered">Budlight Tweet Sentiment Dashboard</h1>
+    <!-- Render the Plotly graph using the HTML passed from the Flask route -->
+    {% for graph_html, wordcloud_base64 in graphs %}
+        {{ graph_html | safe }}
+        <!-- Display the word cloud image using the base64 data URI -->
+        <img src="data:image/png;base64,{{ wordcloud_base64 }}" alt="Word Cloud for {{ graph_html.date }}" class="centered-image" />
+    {% endfor %}
+    <div>
+        <h3>Tweets from {{display_date}}:</h3>
+        <br>
+        <form action="/" method="post">
+        <label for="date">Select a different date:</label>
+        <input type="date" id="date" name="selected_date">
+        <input type="submit" value="Change Date">
+        </form>
+        <ul>
+            {% for tweet, score in tweets_with_scores %}
+            <li>Score: {{ score }} Tweet: {{ tweet }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>
